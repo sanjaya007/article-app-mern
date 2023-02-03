@@ -1,3 +1,14 @@
+let otp = "";
+
+const generateOTP = () => {
+  for (let i = 1; i <= 6; i++) {
+    const randomValue = Math.round(Math.random() * 9);
+    otp += randomValue;
+  }
+
+  return otp;
+};
+
 const UserModel = require("../models/User");
 
 // get users from db then return
@@ -13,17 +24,10 @@ const getUsers = async (req, res) => {
   }
 };
 
+// post user api
 const addUser = async (req, res) => {
   try {
     const body = req.body;
-
-    if (body.name === "") {
-      res.json({
-        success: false,
-        message: "name khali vayo !",
-      });
-      return false;
-    }
 
     const user = new UserModel({
       name: body.name,
@@ -31,18 +35,52 @@ const addUser = async (req, res) => {
       password: body.password,
     });
 
+    const otpValue = generateOTP();
+
     user.save();
 
     res.json({
       success: true,
       message: "User added successfully!",
+      otp: otpValue,
     });
   } catch (error) {
     console.log(error);
   }
 };
 
+// login api
+const loginUser = async (req, res) => {
+  const body = req.body;
+
+  const user = await UserModel.findOne({ email: body.email });
+
+  if (!user) {
+    res.json({
+      success: false,
+      message: "User not found !",
+    });
+    return false;
+  }
+
+  const result = await user.comparePassword(body.password);
+
+  if (!result) {
+    res.json({
+      success: false,
+      message: "Email or password is wrong !",
+    });
+    return false;
+  }
+
+  res.json({
+    success: true,
+    message: "Login successful !",
+  });
+};
+
 module.exports = {
   getUsers,
   addUser,
+  loginUser,
 };
