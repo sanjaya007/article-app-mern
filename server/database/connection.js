@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const dbConnection = async (req, res) => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/mern_app", {
+    await mongoose.connect(process.env.DB_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

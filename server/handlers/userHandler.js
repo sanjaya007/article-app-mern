@@ -1,3 +1,4 @@
+const { createToken } = require("../utils")
 let otp = "";
 
 const generateOTP = () => {
@@ -73,9 +74,19 @@ const loginUser = async (req, res) => {
     return false;
   }
 
+  const token = createToken({ data: {
+    name: user.name,
+    email: user.email
+  } });
+  user.token = token;
+  await user.save();
+
   res.json({
     success: true,
     message: "Login successful !",
+    data: {
+      token
+    },
   });
 };
 

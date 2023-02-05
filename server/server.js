@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+require('dotenv').config()
 
 const fileUpload = require("express-fileupload");
 
@@ -11,6 +12,8 @@ const {
 } = require("./handlers/articleHandler");
 require("./database/connection");
 
+const { authenticateToken } = require("./middleware/authenticate")
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload());
@@ -18,16 +21,16 @@ app.use(fileUpload());
 app.use("/uploads", express.static("uploads"));
 
 // user
-app.get("/users", getUsers);
+app.get("/users", authenticateToken, getUsers);
 app.post("/user/add", addUser);
 app.post("/user/login", loginUser);
 
 // article
-app.get("/articles", getArticles);
-app.post("/article/add", addArticle);
+app.get("/articles", authenticateToken, getArticles);
+app.post("/article/add", authenticateToken, addArticle);
 app.put("/article/edit/:id", editArticle);
 
-const port = 5000;
+const port = process.env.APP_PORT;
 app.listen(port, function () {
   console.log("Server listening on port " + port);
 });
