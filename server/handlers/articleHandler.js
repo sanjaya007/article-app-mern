@@ -1,6 +1,5 @@
-const fs = require("fs");
-const path = require("path");
 const ArticleModel = require("../models/Article");
+const { imageValidation, uploadImage } = require("../utils");
 
 const getArticles = async (req, res) => {
   try {
@@ -14,36 +13,18 @@ const addArticle = async (req, res) => {
   try {
     const body = req.body;
     const imageFile = req.files.image;
-    const hashedFileName = imageFile.md5;
-    const extension = path.extname(imageFile.name);
 
-    if (!imageFile.mimetype.startsWith("image")) {
-      res.json({
-        success: false,
-        message: "Invalid file type !",
-      });
+    if (!imageValidation(imageFile.mimetype, res)) {
       return false;
     }
 
-    if (!fs.existsSync("uploads")) {
-      fs.mkdirSync("uploads");
-    }
-
-    imageFile.mv("uploads/" + hashedFileName + extension, function (err) {
-      if (err) {
-        console.log(err);
-        res.json({
-          success: false,
-          message: "Something went wrong.",
-        });
-      }
-    });
+    const imageFileName = uploadImage("uploads", imageFile);
 
     const article = new ArticleModel({
       title: body.title,
       description: body.description,
       author: body.author,
-      image: "uploads/" + imageFile.name,
+      image: "uploads/" + imageFileName,
     });
 
     article.save();
@@ -59,13 +40,52 @@ const addArticle = async (req, res) => {
 
 const editArticle = async (req, res) => {
   try {
+    let imageFileName = null;
+    const id = req.params.id;
+    const body = req.body;
+
+    if (req.files) {
+      const imageFile = req.files.image;
+      if (!imageValidation(imageFile.mimetype, res)) {
+        return false;
+      }
+
+      imageFileName = uploadImage("uploads", imageFile);
+    }
+
+    const editArticle = await ArticleModel.findByIdAndUpdate(
+      { _id: id },
+      {
+        title: body.title,
+        description: body.description,
+        author: body.author,
+        image: imageFileName ? "uploads/" + imageFileName : null,
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Article updated successfully!",
+    });
   } catch (error) {
     console.log(error);
   }
+};
+
+const deleteArticle = async (req, res) => {
+  const id = req.params.id;
+
+  const deleteArticle = await ArticleModel.findByIdAndRemove({ _id: id });
+
+  res.json({
+    success: true,
+    message: "Article deleted successfully!",
+  });
 };
 
 module.exports = {
   getArticles,
   addArticle,
   editArticle,
+  deleteArticle,
 };

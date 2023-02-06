@@ -1,4 +1,4 @@
-const { createToken } = require("../utils")
+const { createToken } = require("../utils");
 let otp = "";
 
 const generateOTP = () => {
@@ -74,10 +74,12 @@ const loginUser = async (req, res) => {
     return false;
   }
 
-  const token = createToken({ data: {
-    name: user.name,
-    email: user.email
-  } });
+  const token = createToken({
+    data: {
+      name: user.name,
+      email: user.email,
+    },
+  });
   user.token = token;
   await user.save();
 
@@ -85,13 +87,45 @@ const loginUser = async (req, res) => {
     success: true,
     message: "Login successful !",
     data: {
-      token
+      token,
     },
   });
+};
+
+const changePassword = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const body = req.body;
+
+    const user = await UserModel.findOne({ _id: id });
+
+    const result = await user.comparePassword(body.old_password);
+
+    if (!result) {
+      res.json({
+        success: false,
+        message: "Old password is wrong !",
+      });
+      return false;
+    }
+
+    user.password = body.new_password;
+
+    user.save();
+
+    res.json({
+      success: true,
+      message: "Password change successful !",
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 module.exports = {
   getUsers,
   addUser,
   loginUser,
+  changePassword,
 };
