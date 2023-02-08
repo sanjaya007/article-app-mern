@@ -3,19 +3,62 @@ import "./App.css";
 function App() {
   return (
     <>
-      <div className="App font-roboto flex justify-between flex-col py-4 relative">
-        <h1 className="my-4 bg-blue-500 text-white py-4 px-4 font-bold text-4xl text-center">
-          I am blue !!
-        </h1>
-        <h1 className="my-4 bg-red-500 text-white py-4 px-4 font-bold text-4xl text-center">
-          I am red !!
-        </h1>
-        <h1 className="my-4 bg-green-500 text-black py-4 px-4 font-bold text-4xl text-center font-lily">
-          I am green !!
-        </h1>
-        <h1 className="tracking-widest my-4 mx-4 bg-[#ececec] text-black py-4 px-4 font-bold text-4xl text-center rounded-md shadow-2xl">
-          I am shadow !!
-        </h1>
+      <div className="App font-roboto grid gap-4 md:grid-cols-3 md:grid-rows-2">
+        <div className="box px-3 pb-3 bg-blue-500">
+          <h1 className="text-white py-4 px-4 font-bold text-3xl text-center">
+            I am blue !!
+          </h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam qui
+            omnis voluptate laborum quibusdam optio corporis ducimus rerum
+            provident fugit vitae tenetur iure suscipit, id quasi modi voluptas
+            molestias? Sed.
+          </p>
+        </div>
+        <div className="box px-3 pb-3 box-red bg-red-500">
+          <h1 className="  text-white py-4 px-4 font-bold text-3xl text-center">
+            I am red !!
+          </h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam qui
+            omnis voluptate laborum quibusdam optio corporis ducimus rerum
+            provident fugit vitae tenetur iure suscipit, id quasi modi voluptas
+            molestias? Sed.
+          </p>
+        </div>
+        <div className="box px-3 pb-3 box-green bg-green-500">
+          <h1 className="  text-black py-4 px-4 font-bold text-3xl text-center font-lily">
+            I am green !!
+          </h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam qui
+            omnis voluptate laborum quibusdam optio corporis ducimus rerum
+            provident fugit vitae tenetur iure suscipit, id quasi modi voluptas
+            molestias? Sed.
+          </p>
+        </div>
+        <div className="box px-3 pb-3 bg-orange-500">
+          <h1 className="tracking-widest  text-black py-4 px-4 font-bold text-3xl text-center">
+            I am orange !!
+          </h1>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam qui
+            omnis voluptate laborum quibusdam optio corporis ducimus rerum
+            provident fugit vitae tenetur iure suscipit, id quasi modi voluptas
+            molestias? Sed.
+          </p>
+        </div>
+        <div className="box px-3 pb-3 box-black bg-[#000000]">
+          <h1 className="tracking-widest  text-white py-4 px-4 font-bold text-3xl text-center">
+            I am shadow !!
+          </h1>
+          <p className="text-white">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Veniam qui
+            omnis voluptate laborum quibusdam optio corporis ducimus rerum
+            provident fugit vitae tenetur iure suscipit, id quasi modi voluptas
+            molestias? Sed.
+          </p>
+        </div>
       </div>
       <div className="flex justify-center">
         <button className="transition duration-700 ease-in-out bg-blue-500 px-4 py-3 text-white font-mono rounded-md cursor-pointer hover:bg-blue-800 active:bg-green-500">
