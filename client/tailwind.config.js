@@ -5,7 +5,7 @@ module.exports = {
     extend: {},
     fontFamily: {
       roboto: ['"Roboto"'],
-      lily: ['"Lilita One"'],
+      lily: ['"Lilita One", "cursive"'],
     },
   },
   plugins: [],
