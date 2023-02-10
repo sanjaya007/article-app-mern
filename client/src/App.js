@@ -6,15 +6,17 @@ import Common from "./components/Common";
 
 function App() {
   return (
-    <main className="max-w-screen-md mx-auto py-3">
-      <Routes>
-        <Route path="/" element={<Common />}>
-          <Route index element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
-      </Routes>
-    </main>
+    <div className="main-wrapper h-screen w-screen bg-[#f1f2f6] dark:bg-[#0F172A]">
+      <main className="max-w-screen-md mx-auto py-3">
+        <Routes>
+          <Route path="/" element={<Common />}>
+            <Route index element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+        </Routes>
+      </main>
+    </div>
   );
 }
 
