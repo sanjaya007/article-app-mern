@@ -43,11 +43,11 @@ const Navbar = () => {
         <div className="icons">
           {theme === "dark" ? (
             <div className="icon cursor-pointer" onClick={handleTheme}>
-              <i class="fa-solid fa-sun dark:text-white"></i>
+              <i className="fa-solid fa-sun dark:text-white"></i>
             </div>
           ) : (
             <div className="icon cursor-pointer" onClick={handleTheme}>
-              <i class="fa-solid fa-moon dark:text-white"></i>
+              <i className="fa-solid fa-moon dark:text-white"></i>
             </div>
           )}
         </div>

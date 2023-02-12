@@ -3,9 +3,7 @@ import Post from "../components/Post";
 
 const Home = () => {
   return (
-    <div>
-      <h1>Home</h1>
-      <Post />
+    <div className="post-wrapper pt-[20px] grid gap-y-10">
       <Post />
       <Post />
       <Post />
