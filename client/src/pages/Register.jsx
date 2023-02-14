@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const BASE_URL = "http://localhost:5000/user";
 
 const Register = () => {
   const [input, setInput] = useState({
@@ -8,7 +12,9 @@ const Register = () => {
   });
   const [error, setError] = useState(null);
 
-  const registerUser = (e) => {
+  const navigate = useNavigate();
+
+  const registerUser = async (e) => {
     e.preventDefault();
 
     for (const key in input) {
@@ -17,6 +23,21 @@ const Register = () => {
         return false;
       }
     }
+
+    const response = await axios({
+      method: "post",
+      url: BASE_URL + "/add",
+      data: input,
+    });
+
+    const data = response.data;
+
+    if (!data.success) {
+      setError(data.message);
+      return false;
+    }
+
+    navigate("/login");
   };
 
   return (
