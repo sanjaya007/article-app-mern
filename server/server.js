@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+
 const app = express();
 require("dotenv").config();
 
@@ -21,6 +23,7 @@ require("./database/connection");
 
 const { authenticateToken } = require("./middleware/authenticate");
 
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload());
@@ -37,9 +40,9 @@ app.patch("/user/change-password/:id", changePassword);
 
 // article
 app.get("/articles", authenticateToken, getArticles);
-app.post("/article/add", addArticle);
-app.put("/article/edit/:id", editArticle);
-app.delete("/article/delete/:id", deleteArticle);
+app.post("/article/add", authenticateToken, addArticle);
+app.put("/article/edit/:id", authenticateToken, editArticle);
+app.delete("/article/delete/:id", authenticateToken, deleteArticle);
 
 const port = process.env.APP_PORT;
 app.listen(port, function () {

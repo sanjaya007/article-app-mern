@@ -36,6 +36,16 @@ const addUser = async (req, res) => {
       password: body.password,
     });
 
+    const emailAlreadyExists = await UserModel.findOne({ email: body.email });
+
+    if (emailAlreadyExists) {
+      res.json({
+        success: false,
+        message: "Email already exist !",
+      });
+      return false;
+    }
+
     const otpValue = generateOTP();
 
     user.save();
@@ -83,6 +93,7 @@ const loginUser = async (req, res) => {
   user.token = token;
   await user.save();
 
+  res.cookie("token", token);
   res.json({
     success: true,
     message: "Login successful !",
