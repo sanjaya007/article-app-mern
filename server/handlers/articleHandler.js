@@ -3,6 +3,7 @@ const { imageValidation, uploadImage } = require("../utils");
 
 const getArticles = async (req, res) => {
   try {
+    console.log(req.user)
     res.send("Hello");
   } catch (error) {
     console.log(error);

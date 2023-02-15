@@ -46,14 +46,11 @@ const addUser = async (req, res) => {
       return false;
     }
 
-    const otpValue = generateOTP();
-
-    user.save();
+    await user.save();
 
     res.json({
       success: true,
-      message: "User added successfully!",
-      otp: otpValue,
+      message: "User added successfully!"
     });
   } catch (error) {
     console.log(error);
@@ -93,7 +90,7 @@ const loginUser = async (req, res) => {
   user.token = token;
   await user.save();
 
-  res.cookie("token", token);
+  res.cookie("auth", token);
   res.json({
     success: true,
     message: "Login successful !",

@@ -1,20 +1,25 @@
+const UserModel = require("../models/User");
 const { verifyToken } = require("../utils");
 
 module.exports = {
-    authenticateToken: function(req, res, next) {
+    authenticateToken: async function(req, res, next) {
         try {
-            const token = req.body.token || req.query.token || req.headers["x-authorization"];
+            console.log(req.cookies)
+            const token = req.cookies.auth;
             if(!token) {
                 return res.send("Access denied!")
             }
 
             const tokenInfo = verifyToken(token)
-            console.log(tokenInfo)
+            const user = await UserModel.findOne({ email: tokenInfo.data.email, token: token })
+            if(!user) return res.send("Access denied!")
 
+            req.user = user
             next()
 
         } catch (error) {
             console.log(error.message)
+            if(error.message === "jwt expired") res.send("Invalid token!")
         }
     }
 }
