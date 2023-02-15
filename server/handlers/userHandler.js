@@ -1,4 +1,4 @@
-const { createToken } = require("../utils");
+const { createToken, verifyToken } = require("../utils");
 let otp = "";
 
 const generateOTP = () => {
@@ -50,7 +50,7 @@ const addUser = async (req, res) => {
 
     res.json({
       success: true,
-      message: "User added successfully!"
+      message: "User added successfully!",
     });
   } catch (error) {
     console.log(error);
@@ -131,9 +131,29 @@ const changePassword = async (req, res) => {
   }
 };
 
+const getProfileInfo = async (req, res) => {
+  try {
+    const token = req.body.token;
+    if (!token)
+      return res.json({
+        success: false,
+        message: "No token found !",
+      });
+    const tokenInfo = await verifyToken(token);
+    console.log(tokenInfo);
+    return res.json({
+      success: true,
+      data: tokenInfo.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
   loginUser,
   changePassword,
+  getProfileInfo,
 };

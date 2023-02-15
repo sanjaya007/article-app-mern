@@ -10,6 +10,7 @@ const {
   addUser,
   loginUser,
   changePassword,
+  getProfileInfo,
 } = require("./handlers/userHandler");
 
 const {
@@ -26,7 +27,7 @@ app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(fileUpload());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use("/uploads", express.static("uploads"));
 
 // user
@@ -42,6 +43,9 @@ app.get("/articles", authenticateToken, getArticles);
 app.post("/article/add", authenticateToken, addArticle);
 app.put("/article/edit/:id", authenticateToken, editArticle);
 app.delete("/article/delete/:id", authenticateToken, deleteArticle);
+
+// token info
+app.post("/profile_info", getProfileInfo);
 
 const port = process.env.APP_PORT;
 app.listen(port, function () {

@@ -1,10 +1,35 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
 
+const BASE_URL = "http://localhost:5000/profile_info";
+
 const Navbar = () => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(Cookies.get("auth") ?? null);
   const [theme, setTheme] = useState(
     localStorage.getItem("mernTheme") ?? "light"
   );
+
+  useEffect(() => {
+    const getUser = async () => {
+      const response = await axios({
+        method: "post",
+        url: BASE_URL,
+        data: {
+          token: token,
+        },
+        withCredentials: true,
+      });
+      const data = response.data;
+      console.log(data);
+      if (data.success) {
+        setUser(data.data);
+      }
+    };
+    getUser();
+  }, []);
 
   useEffect(() => {
     if (theme === "dark") {
