@@ -16,7 +16,6 @@ const UserModel = require("../models/User");
 const getUsers = async (req, res) => {
   try {
     const users = await UserModel.find();
-    console.log(users);
     res.json({
       users: users,
     });
@@ -96,6 +95,8 @@ const loginUser = async (req, res) => {
     message: "Login successful !",
     data: {
       token,
+      name: user.name,
+      email: user.email,
     },
   });
 };
@@ -140,7 +141,6 @@ const getProfileInfo = async (req, res) => {
         message: "No token found !",
       });
     const tokenInfo = await verifyToken(token);
-    console.log(tokenInfo);
     return res.json({
       success: true,
       data: tokenInfo.data,

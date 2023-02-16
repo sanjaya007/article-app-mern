@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
+
 const BASE_URL = "http://localhost:5000/user";
 
 const Login = () => {
+  const { setProfile } = useContext(UserContext);
+
+  console.log(setProfile);
   const [input, setInput] = useState({
     email: "",
     password: "",
@@ -35,6 +40,8 @@ const Login = () => {
       setError(data.message);
       return false;
     }
+
+    setProfile({ name: data.name, email: data.email });
 
     navigate("/");
   };

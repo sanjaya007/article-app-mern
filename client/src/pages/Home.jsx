@@ -1,14 +1,14 @@
 import React from "react";
-import Post from "../components/Post";
+import Article from "../components/Article";
 
 const Home = () => {
   return (
-    <div className="post-wrapper pt-[20px] grid gap-y-10">
-      <Post />
-      <Post />
-      <Post />
-      <Post />
-      <Post />
+    <div className="article-wrapper pt-[20px] grid gap-y-10">
+      <Article />
+      <Article />
+      <Article />
+      <Article />
+      <Article />
     </div>
   );
 };

@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { Link } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 const BASE_URL = "http://localhost:5000/profile_info";
 
 const Navbar = () => {
-  const [user, setUser] = useState(null);
+  const { profile, setProfile } = useContext(UserContext);
+
   const [token, setToken] = useState(Cookies.get("auth") ?? null);
   const [theme, setTheme] = useState(
     localStorage.getItem("mernTheme") ?? "light"
@@ -25,7 +27,7 @@ const Navbar = () => {
       const data = response.data;
       console.log(data);
       if (data.success) {
-        setUser(data.data);
+        setProfile(data.data);
       }
     };
     getUser();
@@ -53,18 +55,40 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="links flex justify-end items-center gap-5">
-        <Link
-          to="/register"
-          className="hover:font-bold transition-all dark:text-white"
-        >
-          Register
-        </Link>
-        <Link
-          to="/login"
-          className="hover:font-bold transition-all dark:text-white"
-        >
-          Login
-        </Link>
+        {!profile && (
+          <>
+            <Link
+              to="/register"
+              className="hover:font-bold transition-all dark:text-white"
+            >
+              Register
+            </Link>
+            <Link
+              to="/login"
+              className="hover:font-bold transition-all dark:text-white"
+            >
+              Login
+            </Link>
+          </>
+        )}
+
+        {profile && (
+          <>
+            <Link
+              to="/create-article"
+              className="hover:font-bold transition-all dark:text-white"
+            >
+              Create Article
+            </Link>
+            <Link
+              to="#"
+              className="hover:font-bold transition-all dark:text-white"
+            >
+              Log Out
+            </Link>
+          </>
+        )}
+
         <div className="icons">
           {theme === "dark" ? (
             <div className="icon cursor-pointer" onClick={handleTheme}>
