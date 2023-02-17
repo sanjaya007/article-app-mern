@@ -1,10 +1,30 @@
+const moment = require("moment/moment");
 const ArticleModel = require("../models/Article");
 const { imageValidation, uploadImage } = require("../utils");
 
 const getArticles = async (req, res) => {
   try {
-    console.log(req.user)
-    res.send("Hello");
+    const articles = await ArticleModel.find();
+
+    const finalArticles = [];
+    articles.forEach((article) => {
+      finalArticles.push({
+        title: article.title,
+        description: article.description,
+        author: article.author,
+        image: article.image,
+        createdAt: article.createdAt,
+      });
+    });
+    finalArticles.forEach((article) => {
+      article.createdAt = moment(article.createdAt).fromNow();
+    });
+    console.log(finalArticles);
+
+    res.json({
+      success: true,
+      data: finalArticles,
+    });
   } catch (error) {
     console.log(error);
   }

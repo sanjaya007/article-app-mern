@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "http://localhost:5000/article/add";
@@ -25,10 +26,21 @@ const CreateArticle = () => {
       }
     }
 
+    const formData = new FormData();
+    formData.append("title", input.title);
+    formData.append("description", input.description);
+    formData.append("author", input.author);
+    formData.append("image", input.image);
+
     const response = await axios({
       method: "post",
       url: BASE_URL,
-      data: input,
+      data: formData,
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: Cookies.get("auth") ?? null,
+      },
     });
 
     const data = response.data;

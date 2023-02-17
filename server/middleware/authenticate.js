@@ -4,8 +4,7 @@ const { verifyToken } = require("../utils");
 module.exports = {
   authenticateToken: async function (req, res, next) {
     try {
-      console.log("authtoken", req.cookies.auth);
-      const token = req.cookies.auth;
+      const token = req.cookies.auth || req.headers["authorization"];
       if (!token) {
         return res.send("Access denied!");
       }
