@@ -1,9 +1,40 @@
 import React, { useState } from "react";
 import axios from "axios";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "http://localhost:5000/article/add";
+
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ["bold", "italic", "underline", "strike", "blockquote"],
+    [
+      { list: "ordered" },
+      { list: "bullet" },
+      { indent: "-1" },
+      { indent: "+1" },
+    ],
+    ["link", "image"],
+    ["clean"],
+  ],
+};
+
+const formats = [
+  "header",
+  "bold",
+  "italic",
+  "underline",
+  "strike",
+  "blockquote",
+  "list",
+  "bullet",
+  "indent",
+  "link",
+  "image",
+];
 
 const CreateArticle = () => {
   const [input, setInput] = useState({
@@ -54,7 +85,7 @@ const CreateArticle = () => {
   };
 
   return (
-    <form className="pt-[50px] max-w-sm mx-auto" onSubmit={postArticle}>
+    <form className="pt-[50px] max-w-xl mx-auto" onSubmit={postArticle}>
       <h1 className="text-3xl font-bold text-center mb-[20px] dark:text-white">
         Create Article
       </h1>
@@ -68,21 +99,6 @@ const CreateArticle = () => {
           setInput((prev) => ({
             title: e.target.value,
             description: prev.description,
-            author: prev.author,
-            image: prev.image,
-          }))
-        }
-      />
-      <textarea
-        className="block w-[100%] outline-none py-[10px] px-[10px] rounded-md mb-3"
-        type="text"
-        name="description"
-        placeholder="Description"
-        value={input.description}
-        onChange={(e) =>
-          setInput((prev) => ({
-            title: prev.title,
-            description: e.target.value,
             author: prev.author,
             image: prev.image,
           }))
@@ -116,6 +132,20 @@ const CreateArticle = () => {
             image: e.target.files[0],
           }));
         }}
+      />
+      <ReactQuill
+        theme="snow"
+        modules={modules}
+        formats={formats}
+        value={input.description}
+        onChange={(value) =>
+          setInput((prev) => ({
+            title: prev.title,
+            description: value,
+            author: prev.author,
+            image: prev.image,
+          }))
+        }
       />
       <div className="error-box">
         <p className="text-red-500 font-semibold text-sm">

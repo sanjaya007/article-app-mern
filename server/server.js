@@ -15,6 +15,7 @@ const {
 
 const {
   getArticles,
+  getArticleById,
   addArticle,
   editArticle,
   deleteArticle,
@@ -40,6 +41,7 @@ app.patch("/user/change-password/:id", changePassword);
 
 // article
 app.get("/articles", authenticateToken, getArticles);
+app.get("/article/:id", authenticateToken, getArticleById);
 app.post("/article/add", authenticateToken, addArticle);
 app.put("/article/edit/:id", authenticateToken, editArticle);
 app.delete("/article/delete/:id", authenticateToken, deleteArticle);

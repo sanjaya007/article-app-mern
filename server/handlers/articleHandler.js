@@ -9,6 +9,7 @@ const getArticles = async (req, res) => {
     const finalArticles = [];
     articles.forEach((article) => {
       finalArticles.push({
+        id: article._id,
         title: article.title,
         description: article.description,
         author: article.author,
@@ -24,6 +25,27 @@ const getArticles = async (req, res) => {
     res.json({
       success: true,
       data: finalArticles,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const getArticleById = async (req, res) => {
+  try {
+    const article = await ArticleModel.findById(req.params.id);
+    if (!article) {
+      res.json({
+        success: true,
+        message: "Article not found !",
+        data: null,
+      });
+      return false;
+    }
+    res.json({
+      success: true,
+      message: "Article found !",
+      data: article,
     });
   } catch (error) {
     console.log(error);
@@ -106,6 +128,7 @@ const deleteArticle = async (req, res) => {
 
 module.exports = {
   getArticles,
+  getArticleById,
   addArticle,
   editArticle,
   deleteArticle,

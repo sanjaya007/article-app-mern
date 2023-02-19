@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const BASE_URL = "http://localhost:5000/";
 
-const Article = ({ title, description, author, image, createdAt }) => {
+const Article = ({ id, title, description, author, image, createdAt }) => {
   return (
     <div className="post grid md:grid-cols-2">
       <div className="left-box pr-2 mb-2 md:mb-0">
@@ -29,7 +29,10 @@ const Article = ({ title, description, author, image, createdAt }) => {
           <p className="text-[#2980b9] font-semibold">
             Author: <span>{author}</span>
           </p>
-          <Link to="" className="text-[#e67e22] font-semibold underline ">
+          <Link
+            to={`/article/${id}`}
+            className="text-[#e67e22] font-semibold underline "
+          >
             See more
           </Link>
         </div>

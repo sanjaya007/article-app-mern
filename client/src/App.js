@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import { Routes, Route } from "react-router-dom";
 import Common from "./components/Common";
 import CreateArticle from "./pages/CreateArticle";
+import ArticleView from "./pages/ArticleView";
 import "./App.css";
 
 import { UserContextProvider } from "./contexts/UserContext";
@@ -19,6 +20,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/create-article" element={<CreateArticle />} />
+              <Route path="/article/:id" element={<ArticleView />} />
             </Route>
           </Routes>
         </UserContextProvider>
