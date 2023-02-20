@@ -35,13 +35,18 @@ const Login = () => {
     });
 
     const data = response.data;
+    console.log(data);
 
     if (!data.success) {
       setError(data.message);
       return false;
     }
 
-    setProfile({ name: data.name, email: data.email });
+    setProfile({
+      user_id: data.data.user_id,
+      name: data.data.name,
+      email: data.data.email,
+    });
 
     navigate("/");
   };

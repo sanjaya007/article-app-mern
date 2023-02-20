@@ -13,11 +13,12 @@ const Home = () => {
         withCredentials: true,
       });
       const data = response.data;
-      console.log(data);
       setArticles(data.data);
     };
     getArticles();
   }, []);
+
+  if (!articles) return "";
 
   return (
     <div className="article-wrapper pt-[20px] grid gap-y-10">

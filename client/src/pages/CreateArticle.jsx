@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 const BASE_URL = "http://localhost:5000/article/add";
 
@@ -37,10 +38,11 @@ const formats = [
 ];
 
 const CreateArticle = () => {
+  const { profile } = useContext(UserContext);
+  console.log(profile);
   const [input, setInput] = useState({
     title: "",
     description: "",
-    author: "",
     image: "",
   });
   const [error, setError] = useState(null);
@@ -59,8 +61,10 @@ const CreateArticle = () => {
 
     const formData = new FormData();
     formData.append("title", input.title);
+    formData.append("introduction", input.introduction);
     formData.append("description", input.description);
-    formData.append("author", input.author);
+    formData.append("author_id", profile ? profile.user_id : "");
+    formData.append("author", profile ? profile.name : "");
     formData.append("image", input.image);
 
     const response = await axios({
@@ -98,8 +102,8 @@ const CreateArticle = () => {
         onChange={(e) =>
           setInput((prev) => ({
             title: e.target.value,
+            introduction: prev.introduction,
             description: prev.description,
-            author: prev.author,
             image: prev.image,
           }))
         }
@@ -107,14 +111,14 @@ const CreateArticle = () => {
       <input
         className="block w-[100%] outline-none py-[10px] px-[10px] rounded-md mb-3"
         type="text"
-        name="author"
-        placeholder="Author"
-        value={input.author}
+        name="introduction"
+        placeholder="Introduction"
+        value={input.introduction}
         onChange={(e) =>
           setInput((prev) => ({
             title: prev.title,
+            introduction: e.target.value,
             description: prev.description,
-            author: e.target.value,
             image: prev.image,
           }))
         }
@@ -127,8 +131,8 @@ const CreateArticle = () => {
           console.log();
           setInput((prev) => ({
             title: prev.title,
+            introduction: prev.introduction,
             description: prev.description,
-            author: prev.author,
             image: e.target.files[0],
           }));
         }}
@@ -141,8 +145,8 @@ const CreateArticle = () => {
         onChange={(value) =>
           setInput((prev) => ({
             title: prev.title,
+            introduction: prev.introduction,
             description: value,
-            author: prev.author,
             image: prev.image,
           }))
         }

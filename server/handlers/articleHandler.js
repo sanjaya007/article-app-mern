@@ -11,7 +11,9 @@ const getArticles = async (req, res) => {
       finalArticles.push({
         id: article._id,
         title: article.title,
+        introduction: article.introduction,
         description: article.description,
+        author_id: article.author_id,
         author: article.author,
         image: article.image,
         createdAt: article.createdAt,
@@ -20,7 +22,6 @@ const getArticles = async (req, res) => {
     finalArticles.forEach((article) => {
       article.createdAt = moment(article.createdAt).fromNow();
     });
-    console.log(finalArticles);
 
     res.json({
       success: true,
@@ -65,7 +66,9 @@ const addArticle = async (req, res) => {
 
     const article = new ArticleModel({
       title: body.title,
+      introduction: body.introduction,
       description: body.description,
+      author_id: body.author_id,
       author: body.author,
       image: "uploads/" + imageFileName,
     });
@@ -100,7 +103,9 @@ const editArticle = async (req, res) => {
       { _id: id },
       {
         title: body.title,
+        introduction: body.introduction,
         description: body.description,
+        author_id: body.author_id,
         author: body.author,
         image: imageFileName ? "uploads/" + imageFileName : null,
       }

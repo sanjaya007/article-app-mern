@@ -46,6 +46,11 @@ const Navbar = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
 
+  const logOut = () => {
+    Cookies.remove("auth");
+    setProfile(null);
+  };
+
   return (
     <div className="navbar bg-white shadow-sm py-3 px-4 grid grid-cols-2 rounded-md dark:bg-[#0F172A] dark:border-b dark:border-[#929292] dark:rounded-none">
       <div className="logo">
@@ -82,6 +87,7 @@ const Navbar = () => {
             <Link
               to="#"
               className="hover:font-bold transition-all dark:text-white"
+              onClick={() => logOut()}
             >
               Log Out
             </Link>
