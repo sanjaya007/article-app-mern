@@ -3,13 +3,14 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { UserContext } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 const BASE_URL = "http://localhost:5000/";
 
 const ArticleView = () => {
   const { profile } = useContext(UserContext);
   const [article, setArticle] = useState(null);
-  console.log(profile);
   const param = useParams();
+  const navigate = useNavigate();
   useEffect(() => {
     const getSingleArticle = async () => {
       const response = await axios({
@@ -24,6 +25,18 @@ const ArticleView = () => {
   }, []);
 
   if (!article) return "";
+
+  const deleteArticle = async () => {
+    const response = await axios({
+      method: "delete",
+      url: BASE_URL + "article/delete/" + param.id,
+      withCredentials: true,
+    });
+    const data = response.data;
+    if (data.success) {
+      navigate("/");
+    }
+  };
 
   return (
     <div>
@@ -44,7 +57,7 @@ const ArticleView = () => {
         {profile?.user_id === article?.author_id && (
           <div className="action flex gap-3">
             <Link
-              to=""
+              to={`/edit-article/${article._id}`}
               className="min-w-[80px] py-2 px-4 bg-[#2980b9] text-white rounded-md font-semibold"
             >
               <i className="fa-regular fa-pen-to-square mr-1"></i>
@@ -53,6 +66,9 @@ const ArticleView = () => {
             <Link
               to=""
               className="min-w-[80px] py-2 px-4 bg-[#c0392b] text-white rounded-md font-semibold"
+              onClick={() =>
+                window.confirm("Are you sure?") ? deleteArticle() : ""
+              }
             >
               <i className="fa-solid fa-trash mr-1"></i>
               Delete

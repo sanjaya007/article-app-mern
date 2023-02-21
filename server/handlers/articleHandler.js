@@ -90,26 +90,46 @@ const editArticle = async (req, res) => {
     const id = req.params.id;
     const body = req.body;
 
-    if (req.files) {
+    const article = await ArticleModel.findById(id);
+    if (!article)
+      return res.json({
+        success: false,
+        message: "Article not found!",
+      });
+
+    if (article.author_id !== req.user._id.toJSON()) {
+      return res.json({
+        success: false,
+        message: "Only author can edit!",
+      });
+    }
+
+    if (req.files && req.files.image) {
       const imageFile = req.files.image;
       if (!imageValidation(imageFile.mimetype, res)) {
         return false;
       }
 
       imageFileName = uploadImage("uploads", imageFile);
+      article.image = imageFileName ? "uploads/" + imageFileName : null;
     }
 
-    const editArticle = await ArticleModel.findByIdAndUpdate(
-      { _id: id },
-      {
-        title: body.title,
-        introduction: body.introduction,
-        description: body.description,
-        author_id: body.author_id,
-        author: body.author,
-        image: imageFileName ? "uploads/" + imageFileName : null,
-      }
-    );
+    article.title = body.title;
+    article.introduction = body.introduction;
+    article.description = body.description;
+    await article.save();
+
+    // const editArticle = await ArticleModel.findByIdAndUpdate(
+    //   { _id: id },
+    //   {
+    //     title: body.title,
+    //     introduction: body.introduction,
+    //     description: body.description,
+    //     author_id: body.author_id,
+    //     author: body.author,
+    //     image: imageFileName ? "uploads/" + imageFileName : null,
+    //   }
+    // );
 
     res.json({
       success: true,
@@ -122,6 +142,20 @@ const editArticle = async (req, res) => {
 
 const deleteArticle = async (req, res) => {
   const id = req.params.id;
+
+  const article = await ArticleModel.findById(id);
+  if (!article)
+    return res.json({
+      success: false,
+      message: "Article not found!",
+    });
+
+  if (article.author_id !== req.user._id.toJSON()) {
+    return res.json({
+      success: false,
+      message: "Only author can delete!",
+    });
+  }
 
   const deleteArticle = await ArticleModel.findByIdAndRemove({ _id: id });
 

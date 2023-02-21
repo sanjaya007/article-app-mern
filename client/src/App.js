@@ -8,6 +8,7 @@ import ArticleView from "./pages/ArticleView";
 import "./App.css";
 
 import { UserContextProvider } from "./contexts/UserContext";
+import EditArticle from "./pages/EditArticle";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
               <Route path="/register" element={<Register />} />
               <Route path="/create-article" element={<CreateArticle />} />
               <Route path="/article/:id" element={<ArticleView />} />
+              <Route path="/edit-article/:id" element={<EditArticle />} />
             </Route>
           </Routes>
         </UserContextProvider>
