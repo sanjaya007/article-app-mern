@@ -10,23 +10,26 @@ const truncateText = (text, length) => {
 
 const Article = ({ id, title, introduction, author, image, createdAt }) => {
   return (
-    <div className="post grid md:grid-cols-2">
-      <div className="left-box pr-2 mb-2 md:mb-0">
+    <div className="post grid md:grid-cols-2 bg-white dark:bg-transparent">
+      <div className="left-box mb-2 md:mb-0">
         <img
           src={`${BASE_URL}${image}`}
           className="h-[300px] w-[100%] object-cover"
           alt="article"
         />
       </div>
-      <div className="right-box pl-2">
+      <div className="right-box px-3 py-2">
         <div className="title">
           <h1 className="font-bold text-xl dark:text-[#ffffff]">
             {truncateText(title, 85)}
           </h1>
         </div>
-        <div className="date py-1">
+        <div className="date py-1 flex justify-between items-center">
           <p className="italic text-slate-500">
             Posted: <span>{createdAt}</span>
+          </p>
+          <p className="text-green-700 font-semibold">
+            <i class="fa-solid fa-eye"></i> <span>10</span>
           </p>
         </div>
         <div className="info">

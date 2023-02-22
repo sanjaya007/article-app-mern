@@ -14,6 +14,7 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState(null);
+  const [passwordPreview, setPasswordPreview] = useState(false);
 
   const navigate = useNavigate();
 
@@ -69,19 +70,31 @@ const Login = () => {
           }))
         }
       />
-      <input
-        className="block w-[100%] outline-none py-[10px] px-[10px] rounded-md mb-3"
-        type="text"
-        placeholder="Password"
-        value={input.password}
-        onChange={(e) =>
-          setInput((prev) => ({
-            name: prev.name,
-            email: prev.email,
-            password: e.target.value,
-          }))
-        }
-      />
+      <div className="input-box relative">
+        <input
+          className="block w-[100%] outline-none py-[10px] px-[10px] rounded-md mb-3"
+          type={passwordPreview ? "text" : "password"}
+          placeholder="Password"
+          value={input.password}
+          onChange={(e) =>
+            setInput((prev) => ({
+              name: prev.name,
+              email: prev.email,
+              password: e.target.value,
+            }))
+          }
+        />
+        <div
+          className="icon absolute top-[7px] right-[8px] cursor-pointer"
+          onClick={() => setPasswordPreview(!passwordPreview)}
+        >
+          {passwordPreview ? (
+            <i class="fa-solid fa-eye text-sm"></i>
+          ) : (
+            <i class="fa-solid fa-eye-slash text-sm"></i>
+          )}
+        </div>
+      </div>
       <div className="error-box">
         <p className="text-red-500 font-semibold text-sm">
           {error ? error : ""}

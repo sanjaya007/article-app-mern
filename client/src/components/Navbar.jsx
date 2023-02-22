@@ -27,6 +27,8 @@ const Navbar = () => {
       const data = response.data;
       if (data.success) {
         setProfile(data.data);
+      } else {
+        setProfile(null);
       }
     };
     getUser();
@@ -59,6 +61,8 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="links flex justify-end items-center gap-5">
+        {profile === "loading" && ""}
+
         {!profile && (
           <>
             <Link
@@ -76,7 +80,7 @@ const Navbar = () => {
           </>
         )}
 
-        {profile && (
+        {profile && profile !== "loading" && (
           <>
             <Link
               to="/create-article"

@@ -46,6 +46,7 @@ const CreateArticle = () => {
     image: "",
   });
   const [error, setError] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const navigate = useNavigate();
 
@@ -88,6 +89,12 @@ const CreateArticle = () => {
     navigate("/");
   };
 
+  if (profile === "loading") return "";
+
+  if (!profile) {
+    navigate("/login");
+  }
+
   return (
     <form className="pt-[50px] max-w-xl mx-auto" onSubmit={postArticle}>
       <h1 className="text-3xl font-bold text-center mb-[20px] dark:text-white">
@@ -128,15 +135,22 @@ const CreateArticle = () => {
         type="file"
         name="image"
         onChange={(e) => {
-          console.log();
           setInput((prev) => ({
             title: prev.title,
             introduction: prev.introduction,
             description: prev.description,
             image: e.target.files[0],
           }));
+          const objectUrl = URL.createObjectURL(e.target.files[0]);
+          setPreview(objectUrl);
         }}
       />
+      {preview && (
+        <div className="image-preview grid items-center justify-center mb-3">
+          <img className="max-h-[100px]" src={preview} alt="preview" />
+        </div>
+      )}
+
       <ReactQuill
         theme="snow"
         modules={modules}

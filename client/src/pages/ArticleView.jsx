@@ -54,6 +54,9 @@ const ArticleView = () => {
         <p className="font-bold dark:text-white">
           Posted by: {article.author}{" "}
         </p>
+        <p className="text-green-700 font-semibold">
+          <i class="fa-solid fa-eye"></i> <span>10</span>
+        </p>
         {profile?.user_id === article?.author_id && (
           <div className="action flex gap-3">
             <Link
