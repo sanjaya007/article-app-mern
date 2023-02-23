@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import moment from "moment";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import Comment from "../components/Comment";
 const BASE_URL = "http://localhost:5000/";
 
 const ArticleView = () => {
@@ -21,7 +22,18 @@ const ArticleView = () => {
       const data = response.data;
       setArticle(data.data);
     };
+
+    const addViews = async () => {
+      const response = await axios({
+        method: "post",
+        url: BASE_URL + "article-add-views/" + param.id,
+        withCredentials: true,
+      });
+      const data = response.data;
+      console.log(data);
+    };
     getSingleArticle();
+    addViews();
   }, []);
 
   if (!article) return "";
@@ -55,7 +67,7 @@ const ArticleView = () => {
           Posted by: {article.author}{" "}
         </p>
         <p className="text-green-700 font-semibold">
-          <i class="fa-solid fa-eye"></i> <span>10</span>
+          <i class="fa-solid fa-eye"></i> <span>{article.views}</span>
         </p>
         {profile?.user_id === article?.author_id && (
           <div className="action flex gap-3">
@@ -97,6 +109,34 @@ const ArticleView = () => {
           dangerouslySetInnerHTML={{ __html: article.description }}
           className="dark:text-white"
         ></div>
+      </div>
+      <hr className="border-[#767676] my-5" />
+      <div className="comment">
+        <div className="mb-4">
+          <h1 className="text-3xl font-bold dark:text-white">Comments</h1>
+        </div>
+
+        <div className="input-box mb-4">
+          <textarea
+            className="w-[100%] bg-[#ffffff] rounded-md shadow-sm min-h-[80px] outline-none border-none py-2 px-2 text-sm dark:bg-[#121e3a] dark:text-white"
+            placeholder="Write your comment.."
+          ></textarea>
+          <div className="flex justify-end items-center">
+            <button className="px-4 py-2 bg-[#2980b9] text-white rounded-md">
+              Send
+              <i
+                className="fa-solid fa-paper-plane text-sm"
+                style={{
+                  transform: "rotateX(0deg) rotateY(1deg) rotateZ(62deg)",
+                }}
+              ></i>
+            </button>
+          </div>
+        </div>
+
+        <Comment />
+        <Comment />
+        <Comment />
       </div>
     </div>
   );

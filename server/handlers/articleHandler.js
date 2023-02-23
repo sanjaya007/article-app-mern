@@ -1,3 +1,4 @@
+const fs = require("fs");
 const moment = require("moment/moment");
 const ArticleModel = require("../models/Article");
 const { imageValidation, uploadImage } = require("../utils");
@@ -16,6 +17,7 @@ const getArticles = async (req, res) => {
         author_id: article.author_id,
         author: article.author,
         image: article.image,
+        views: article.views,
         createdAt: article.createdAt,
       });
     });
@@ -110,6 +112,10 @@ const editArticle = async (req, res) => {
         return false;
       }
 
+      fs.unlink(article.image, function (error) {
+        console.log(error);
+      });
+
       imageFileName = uploadImage("uploads", imageFile);
       article.image = imageFileName ? "uploads/" + imageFileName : null;
     }
@@ -118,18 +124,6 @@ const editArticle = async (req, res) => {
     article.introduction = body.introduction;
     article.description = body.description;
     await article.save();
-
-    // const editArticle = await ArticleModel.findByIdAndUpdate(
-    //   { _id: id },
-    //   {
-    //     title: body.title,
-    //     introduction: body.introduction,
-    //     description: body.description,
-    //     author_id: body.author_id,
-    //     author: body.author,
-    //     image: imageFileName ? "uploads/" + imageFileName : null,
-    //   }
-    // );
 
     res.json({
       success: true,
@@ -157,6 +151,10 @@ const deleteArticle = async (req, res) => {
     });
   }
 
+  fs.unlink(article.image, function (error) {
+    console.log(error);
+  });
+
   const deleteArticle = await ArticleModel.findByIdAndRemove({ _id: id });
 
   res.json({
@@ -165,10 +163,37 @@ const deleteArticle = async (req, res) => {
   });
 };
 
+const addViews = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const article = await ArticleModel.findById(id);
+    if (!article)
+      return res.json({
+        success: false,
+        message: "Article not found!",
+      });
+
+    if (!article.viewed.includes(req.socket.remoteAddress)) {
+      article.views++;
+      article.viewed.push(req.socket.remoteAddress);
+    }
+
+    await article.save();
+
+    return res.json({
+      success: true,
+      message: "+1 views",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 module.exports = {
   getArticles,
   getArticleById,
   addArticle,
   editArticle,
   deleteArticle,
+  addViews,
 };

@@ -36,8 +36,8 @@ const Home = () => {
   return (
     <>
       <div className="article-wrapper pt-[20px] grid gap-y-10">
-        {articles.map((article) => (
-          <Article {...article} />
+        {articles.map((article, index) => (
+          <Article {...article} key={index} />
         ))}
       </div>
 
@@ -45,7 +45,7 @@ const Home = () => {
         <div className="see-more flex justify-center items-center pt-4 pb-3">
           <div className="cursor-pointer flex flex-col justify-center items-center ">
             <h1 className="text-md font-semibold">See More</h1>
-            <i class="fa-solid fa-angles-down"></i>
+            <i className="fa-solid fa-angles-down"></i>
           </div>
         </div>
       )}

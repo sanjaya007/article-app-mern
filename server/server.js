@@ -19,6 +19,7 @@ const {
   addArticle,
   editArticle,
   deleteArticle,
+  addViews,
 } = require("./handlers/articleHandler");
 require("./database/connection");
 
@@ -45,6 +46,9 @@ app.get("/article/:id", getArticleById);
 app.post("/article/add", authenticateToken, addArticle);
 app.put("/article/edit/:id", authenticateToken, editArticle);
 app.delete("/article/delete/:id", authenticateToken, deleteArticle);
+
+// add views
+app.post("/article-add-views/:id", addViews);
 
 // token info
 app.post("/profile_info", getProfileInfo);

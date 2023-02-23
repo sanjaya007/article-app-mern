@@ -8,7 +8,15 @@ const truncateText = (text, length) => {
   return text.substring(0, length) + "...";
 };
 
-const Article = ({ id, title, introduction, author, image, createdAt }) => {
+const Article = ({
+  id,
+  title,
+  introduction,
+  author,
+  image,
+  views,
+  createdAt,
+}) => {
   return (
     <div className="post grid md:grid-cols-2 bg-white dark:bg-transparent">
       <div className="left-box mb-2 md:mb-0">
@@ -29,7 +37,7 @@ const Article = ({ id, title, introduction, author, image, createdAt }) => {
             Posted: <span>{createdAt}</span>
           </p>
           <p className="text-green-700 font-semibold">
-            <i class="fa-solid fa-eye"></i> <span>10</span>
+            <i class="fa-solid fa-eye"></i> <span>{views}</span>
           </p>
         </div>
         <div className="info">
