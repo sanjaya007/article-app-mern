@@ -10,8 +10,12 @@ const BASE_URL = "http://localhost:5000/";
 const ArticleView = () => {
   const { profile } = useContext(UserContext);
   const [article, setArticle] = useState(null);
+  const [comments, setComments] = useState(null);
+  const [inputComment, setInputComment] = useState("");
+
   const param = useParams();
   const navigate = useNavigate();
+
   useEffect(() => {
     const getSingleArticle = async () => {
       const response = await axios({
@@ -32,8 +36,20 @@ const ArticleView = () => {
       const data = response.data;
       console.log(data);
     };
+
+    const getComments = async () => {
+      const response = await axios({
+        method: "get",
+        url: BASE_URL + "comment/" + param.id,
+        withCredentials: true,
+      });
+      const data = response.data;
+      setComments(data.data);
+    };
+
     getSingleArticle();
     addViews();
+    getComments();
   }, []);
 
   if (!article) return "";
@@ -48,6 +64,21 @@ const ArticleView = () => {
     if (data.success) {
       navigate("/");
     }
+  };
+
+  const postComment = async (e) => {
+    e.preventDefault();
+    const response = await axios({
+      method: "post",
+      url: BASE_URL + "comment/add",
+      data: {
+        article_id: param.id,
+        comment: inputComment,
+      },
+      withCredentials: true,
+    });
+    const data = response.data;
+    console.log(data);
   };
 
   return (
@@ -116,13 +147,18 @@ const ArticleView = () => {
           <h1 className="text-3xl font-bold dark:text-white">Comments</h1>
         </div>
 
-        <div className="input-box mb-4">
+        <form className="input-box mb-4" onSubmit={postComment}>
           <textarea
             className="w-[100%] bg-[#ffffff] rounded-md shadow-sm min-h-[80px] outline-none border-none py-2 px-2 text-sm dark:bg-[#121e3a] dark:text-white"
             placeholder="Write your comment.."
+            onChange={(e) => setInputComment(e.target.value)}
+            value={inputComment}
           ></textarea>
           <div className="flex justify-end items-center">
-            <button className="px-4 py-2 bg-[#2980b9] text-white rounded-md">
+            <button
+              className="px-4 py-2 bg-[#2980b9] text-white rounded-md"
+              type="submit"
+            >
               Send
               <i
                 className="fa-solid fa-paper-plane text-sm"
@@ -132,11 +168,13 @@ const ArticleView = () => {
               ></i>
             </button>
           </div>
-        </div>
+        </form>
 
-        <Comment />
-        <Comment />
-        <Comment />
+        {!comments
+          ? "Lodaing"
+          : comments.length <= 0
+          ? "Comment not found"
+          : comments.map((comment) => <Comment {...comment} />)}
       </div>
     </div>
   );
