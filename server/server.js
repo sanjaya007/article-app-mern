@@ -24,6 +24,7 @@ const {
 require("./database/connection");
 
 const { authenticateToken } = require("./middleware/authenticate");
+const { addComment, getComments } = require("./handlers/commentHandler");
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.urlencoded({ extended: true }));
@@ -52,6 +53,10 @@ app.post("/article-add-views/:id", addViews);
 
 // token info
 app.post("/profile_info", getProfileInfo);
+
+// comments
+app.post("/comment/add", authenticateToken, addComment);
+app.get("/comment/:articleId", getComments);
 
 const port = process.env.APP_PORT;
 app.listen(port, function () {
