@@ -42,7 +42,7 @@ app.post("/user/login", loginUser);
 app.patch("/user/change-password/:id", changePassword);
 
 // article
-app.get("/articles", getArticles);
+app.get("/articles/:pageNumber", getArticles);
 app.get("/article/:id", getArticleById);
 app.post("/article/add", authenticateToken, addArticle);
 app.put("/article/edit/:id", authenticateToken, editArticle);

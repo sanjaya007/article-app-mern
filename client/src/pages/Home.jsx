@@ -5,18 +5,28 @@ const BASE_URL = "http://localhost:5000/articles";
 
 const Home = () => {
   const [articles, setArticles] = useState(null);
+  const [totalArticles, setTotalArticles] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     const getArticles = async () => {
       const response = await axios({
         method: "get",
-        url: BASE_URL,
+        url: BASE_URL + "/" + currentPage,
         withCredentials: true,
       });
       const data = response.data;
-      setArticles(data.data);
+      console.log(data);
+      setTotalArticles(data.total);
+
+      if (!articles) {
+        setArticles(data.data);
+      } else {
+        setArticles([...articles, ...data.data]);
+      }
     };
     getArticles();
-  }, []);
+  }, [currentPage]);
 
   if (!articles) {
     return (
@@ -41,10 +51,15 @@ const Home = () => {
         ))}
       </div>
 
-      {articles.length > 10 && (
+      {totalArticles > articles.length && (
         <div className="see-more flex justify-center items-center pt-4 pb-3">
           <div className="cursor-pointer flex flex-col justify-center items-center ">
-            <h1 className="text-md font-semibold">See More</h1>
+            <h1
+              className="text-md font-semibold"
+              onClick={() => setCurrentPage(currentPage + 1)}
+            >
+              See More
+            </h1>
             <i className="fa-solid fa-angles-down"></i>
           </div>
         </div>

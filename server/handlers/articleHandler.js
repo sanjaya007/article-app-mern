@@ -5,7 +5,12 @@ const { imageValidation, uploadImage } = require("../utils");
 
 const getArticles = async (req, res) => {
   try {
-    const articles = await ArticleModel.find();
+    const limit = 2;
+    const { pageNumber } = req.params;
+    const articles = await ArticleModel.find()
+      .sort({ createdAt: -1 })
+      .skip(pageNumber > 0 ? (pageNumber - 1) * limit : 0)
+      .limit(limit);
 
     const finalArticles = [];
     articles.forEach((article) => {
@@ -27,6 +32,7 @@ const getArticles = async (req, res) => {
 
     res.json({
       success: true,
+      total: await ArticleModel.countDocuments(),
       data: finalArticles,
     });
   } catch (error) {

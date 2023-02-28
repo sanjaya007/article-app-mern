@@ -43,7 +43,9 @@ const getComments = async (req, res) => {
 
     const comments = await CommentsModel.find({
       article_id: articleId,
-    }).populate("user", ["name"]);
+    })
+      .sort({ createdAt: -1 })
+      .populate("user", ["name"]);
 
     return res.json({
       success: false,

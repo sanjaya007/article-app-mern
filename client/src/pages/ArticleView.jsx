@@ -34,7 +34,6 @@ const ArticleView = () => {
         withCredentials: true,
       });
       const data = response.data;
-      console.log(data);
     };
 
     const getComments = async () => {
@@ -44,6 +43,7 @@ const ArticleView = () => {
         withCredentials: true,
       });
       const data = response.data;
+      console.log(data);
       setComments(data.data);
     };
 
@@ -78,7 +78,16 @@ const ArticleView = () => {
       withCredentials: true,
     });
     const data = response.data;
-    console.log(data);
+
+    const tempObj = {
+      _id: data.data.user[0],
+      name: profile.name,
+    };
+
+    data.data.user[0] = tempObj;
+
+    setInputComment("");
+    setComments([data.data, ...comments]);
   };
 
   return (
@@ -98,7 +107,7 @@ const ArticleView = () => {
           Posted by: {article.author}{" "}
         </p>
         <p className="text-green-700 font-semibold">
-          <i class="fa-solid fa-eye"></i> <span>{article.views}</span>
+          <i className="fa-solid fa-eye"></i> <span>{article.views}</span>
         </p>
         {profile?.user_id === article?.author_id && (
           <div className="action flex gap-3">
@@ -156,12 +165,14 @@ const ArticleView = () => {
           ></textarea>
           <div className="flex justify-end items-center">
             <button
-              className="px-4 py-2 bg-[#2980b9] text-white rounded-md"
+              className={`px-4 py-2 bg-[#2980b9] text-white rounded-md active:scale-[0.95] ${
+                !profile ? "opacity-70 pointer-events-none" : ""
+              }`}
               type="submit"
             >
               Send
               <i
-                className="fa-solid fa-paper-plane text-sm"
+                className="fa-solid fa-paper-plane text-sm ml-1"
                 style={{
                   transform: "rotateX(0deg) rotateY(1deg) rotateZ(62deg)",
                 }}
