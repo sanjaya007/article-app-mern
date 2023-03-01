@@ -33,6 +33,7 @@ const addUser = async (req, res) => {
       name: body.name,
       email: body.email,
       password: body.password,
+      type: "normal",
     });
 
     const emailAlreadyExists = await UserModel.findOne({ email: body.email });
@@ -103,6 +104,53 @@ const loginUser = async (req, res) => {
   });
 };
 
+const googleLogin = async (req, res) => {
+  try {
+    const body = req.body;
+    let user = await UserModel.findOne({ email: body.email });
+
+    if (user && user.type === "normal") {
+      return res.json({
+        success: false,
+        message: "User already registered from that email !",
+      });
+    }
+
+    if (!user) {
+      user = new UserModel({
+        name: body.name,
+        email: body.email,
+        password: body.googleId,
+        type: "google",
+      });
+    }
+
+    const token = createToken({
+      data: {
+        user_id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+    user.token = token;
+    await user.save();
+
+    res.cookie("auth", token);
+    res.json({
+      success: true,
+      message: "Login successful !",
+      data: {
+        token,
+        user_id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const changePassword = async (req, res) => {
   try {
     const id = req.params.id;
@@ -156,6 +204,7 @@ module.exports = {
   getUsers,
   addUser,
   loginUser,
+  googleLogin,
   changePassword,
   getProfileInfo,
 };

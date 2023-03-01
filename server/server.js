@@ -11,6 +11,7 @@ const {
   loginUser,
   changePassword,
   getProfileInfo,
+  googleLogin,
 } = require("./handlers/userHandler");
 
 const {
@@ -37,6 +38,7 @@ app.use("/uploads", express.static("uploads"));
 app.get("/users", authenticateToken, getUsers);
 app.post("/user/add", addUser);
 app.post("/user/login", loginUser);
+app.post("/user/google-login", googleLogin);
 
 //change password
 app.patch("/user/change-password/:id", changePassword);
