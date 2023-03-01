@@ -51,16 +51,18 @@ const Home = () => {
         ))}
       </div>
 
-      {totalArticles > articles.length && (
+      {articles?.length >= totalArticles ? (
+        ""
+      ) : (
         <div className="see-more flex justify-center items-center pt-4 pb-3">
           <div className="cursor-pointer flex flex-col justify-center items-center ">
             <h1
-              className="text-md font-semibold"
+              className="text-md font-semibold dark:text-white"
               onClick={() => setCurrentPage(currentPage + 1)}
             >
               See More
             </h1>
-            <i className="fa-solid fa-angles-down"></i>
+            <i className="fa-solid fa-angles-down dark:text-white"></i>
           </div>
         </div>
       )}

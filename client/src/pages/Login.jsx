@@ -1,22 +1,45 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
+import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
 const BASE_URL = "http://localhost:5000/user";
 
 const Login = () => {
   const { setProfile } = useContext(UserContext);
-
-  console.log(setProfile);
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
+  const [googleUser, setGoogleUser] = useState(null);
   const [error, setError] = useState(null);
   const [passwordPreview, setPasswordPreview] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (googleUser) {
+      const googleApiLogin = async () => {
+        const response = await axios({
+          method: "post",
+          url: BASE_URL + "/google-login",
+          data: googleUser,
+          withCredentials: true,
+        });
+        const data = response.data;
+        setProfile({
+          user_id: data.data.user_id,
+          name: data.data.name,
+          email: data.data.email,
+        });
+
+        navigate("/");
+      };
+      googleApiLogin();
+    }
+  }, [googleUser]);
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -103,10 +126,27 @@ const Login = () => {
       <div className="grid place-items-center">
         <button
           type="submit"
-          className="mt-3 bg-[#ced6e0] w-[100%] py-[10px] px-[10px] rounded-md hover:bg-[#b0bdce] hover:font-semibold"
+          className="mt-3 mb-2 bg-[#ced6e0] w-[100%] py-[10px] px-[10px] rounded-md hover:bg-[#b0bdce] hover:font-semibold"
         >
           Login
         </button>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse);
+            if (credentialResponse) {
+              var decoded = jwt_decode(credentialResponse.credential);
+              setGoogleUser({
+                name: decoded.name,
+                email: decoded.email,
+                googleId: decoded.sub,
+              });
+            }
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+          useOneTap
+        />
       </div>
     </form>
   );
