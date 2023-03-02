@@ -4,28 +4,9 @@ const cookieParser = require("cookie-parser");
 const app = express();
 require("dotenv").config();
 const fileUpload = require("express-fileupload");
+const route = require("./routes/routes");
 
-const {
-  getUsers,
-  addUser,
-  loginUser,
-  changePassword,
-  getProfileInfo,
-  googleLogin,
-} = require("./handlers/userHandler");
-
-const {
-  getArticles,
-  getArticleById,
-  addArticle,
-  editArticle,
-  deleteArticle,
-  addViews,
-} = require("./handlers/articleHandler");
 require("./database/connection");
-
-const { authenticateToken } = require("./middleware/authenticate");
-const { addComment, getComments } = require("./handlers/commentHandler");
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 app.use(express.urlencoded({ extended: true }));
@@ -34,31 +15,8 @@ app.use(fileUpload());
 app.use(cookieParser());
 app.use("/uploads", express.static("uploads"));
 
-// user
-app.get("/users", authenticateToken, getUsers);
-app.post("/user/add", addUser);
-app.post("/user/login", loginUser);
-app.post("/user/google-login", googleLogin);
-
-//change password
-app.patch("/user/change-password/:id", changePassword);
-
-// article
-app.get("/articles/:pageNumber", getArticles);
-app.get("/article/:id", getArticleById);
-app.post("/article/add", authenticateToken, addArticle);
-app.put("/article/edit/:id", authenticateToken, editArticle);
-app.delete("/article/delete/:id", authenticateToken, deleteArticle);
-
-// add views
-app.post("/article-add-views/:id", addViews);
-
-// token info
-app.post("/profile_info", getProfileInfo);
-
-// comments
-app.post("/comment/add", authenticateToken, addComment);
-app.get("/comment/:articleId", getComments);
+// route
+app.use(route);
 
 const port = process.env.APP_PORT;
 app.listen(port, function () {

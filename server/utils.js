@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 module.exports = {
   createToken: function (payload) {
@@ -44,5 +45,28 @@ module.exports = {
     });
 
     return imageFileName;
+  },
+  sendMail: async function (from, to, subject, html) {
+    try {
+      var transporter = nodemailer.createTransport({
+        host: "sandbox.smtp.mailtrap.io",
+        port: 2525,
+        auth: {
+          user: "ca3035e4ee12ec",
+          pass: "f44c65f673fa2b",
+        },
+      });
+
+      let info = await transporter.sendMail({
+        from,
+        to,
+        subject,
+        html,
+      });
+
+      console.log(info);
+    } catch (error) {
+      console.log(error);
+    }
   },
 };
