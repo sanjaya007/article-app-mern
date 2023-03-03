@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const BASE_URL = "http://localhost:5000/";
 
@@ -34,7 +35,7 @@ const Article = ({
         </div>
         <div className="date py-1 flex justify-between items-center">
           <p className="italic text-slate-500">
-            Posted: <span>{createdAt}</span>
+            Posted: <span>{moment(createdAt).fromNow()}</span>
           </p>
           <p className="text-green-700 font-semibold">
             <i class="fa-solid fa-eye"></i> <span>{views}</span>

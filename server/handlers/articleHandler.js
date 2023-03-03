@@ -12,28 +12,10 @@ const getArticles = async (req, res) => {
       .skip(pageNumber > 0 ? (pageNumber - 1) * limit : 0)
       .limit(limit);
 
-    const finalArticles = [];
-    articles.forEach((article) => {
-      finalArticles.push({
-        id: article._id,
-        title: article.title,
-        introduction: article.introduction,
-        description: article.description,
-        author_id: article.author_id,
-        author: article.author,
-        image: article.image,
-        views: article.views,
-        createdAt: article.createdAt,
-      });
-    });
-    finalArticles.forEach((article) => {
-      article.createdAt = moment(article.createdAt).fromNow();
-    });
-
     res.json({
       success: true,
       total: await ArticleModel.countDocuments(),
-      data: finalArticles,
+      data: articles,
     });
   } catch (error) {
     console.log(error);
