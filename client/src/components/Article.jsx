@@ -10,7 +10,7 @@ const truncateText = (text, length) => {
 };
 
 const Article = ({
-  id,
+  _id,
   title,
   introduction,
   author,
@@ -51,7 +51,7 @@ const Article = ({
             Author: <span>{author}</span>
           </p>
           <Link
-            to={`/article/${id}`}
+            to={`/article/${_id}`}
             className="text-[#e67e22] font-semibold underline "
           >
             See more
